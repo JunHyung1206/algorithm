@@ -3,15 +3,24 @@ import java.util.*;
 class Solution {
 
     private static final int PIPE_TYPE_COUNT = 3;
-    private static final int NO_PIPE = 0;       // "직전에 연 종류가 없다"
-    private static final int NOT_CONNECTED = 0; // 연결 없음
+    private static final int NO_PIPE = 0;
+
+    private static class Pipe {
+        final int to;
+        final int type;
+
+        Pipe(int to, int type) {
+            this.to = to;
+            this.type = type;
+        }
+    }
 
     private int nodeCount;
-    private int[][] pipeTypeBetween;
+    private List<List<Pipe>> pipesOf;
 
     public int solution(int n, int infection, int[][] edges, int k) {
         nodeCount = n;
-        pipeTypeBetween = buildPipeTypeMatrix(n, edges);
+        pipesOf = buildPipes(n, edges);
 
         List<int[]> orders = new ArrayList<>();
         generateOrders(orders, new int[k], 0, NO_PIPE);
@@ -23,16 +32,18 @@ class Solution {
         return answer;
     }
 
-    private int[][] buildPipeTypeMatrix(int n, int[][] edges) {
-        int[][] matrix = new int[n + 1][n + 1];
-        for (int[] edge : edges) {
-            matrix[edge[0]][edge[1]] = edge[2];
-            matrix[edge[1]][edge[0]] = edge[2];
+    private List<List<Pipe>> buildPipes(int n, int[][] edges) {
+        List<List<Pipe>> pipes = new ArrayList<>();
+        for (int node = 0; node <= n; node++) {
+            pipes.add(new ArrayList<>());
         }
-        return matrix;
+        for (int[] edge : edges) {
+            pipes.get(edge[0]).add(new Pipe(edge[1], edge[2]));
+            pipes.get(edge[1]).add(new Pipe(edge[0], edge[2]));
+        }
+        return pipes;
     }
 
-    // 같은 종류를 연달아 여는 건 의미가 없으므로 건너뛰고, 길이 k인 모든 순서를 만든다.
     private void generateOrders(List<int[]> orders, int[] order, int depth, int previousType) {
         if (depth == order.length) {
             orders.add(order.clone());
@@ -57,7 +68,6 @@ class Solution {
         return countInfected(infected);
     }
 
-    // 이미 감염된 모든 노드에서 출발해서, 해당 종류 파이프로 닿는 노드를 전부 감염시킨다. (infected를 직접 바꾼다)
     private void spread(boolean[] infected, int pipeType) {
         Queue<Integer> queue = new ArrayDeque<>();
         for (int node = 1; node <= nodeCount; node++) {
@@ -68,10 +78,10 @@ class Solution {
 
         while (!queue.isEmpty()) {
             int current = queue.poll();
-            for (int next = 1; next <= nodeCount; next++) {
-                if (pipeTypeBetween[current][next] == pipeType && !infected[next]) {
-                    infected[next] = true;
-                    queue.offer(next);
+            for (Pipe pipe : pipesOf.get(current)) {
+                if (pipe.type == pipeType && !infected[pipe.to]) {
+                    infected[pipe.to] = true;
+                    queue.offer(pipe.to);
                 }
             }
         }
