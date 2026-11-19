@@ -16,20 +16,21 @@ class Solution {
     }
 
     private int nodeCount;
+    private int maxOpenCount;
     private List<List<Pipe>> pipesOf;
+    private int maxInfected;
 
     public int solution(int n, int infection, int[][] edges, int k) {
         nodeCount = n;
+        maxOpenCount = k;
         pipesOf = buildPipes(n, edges);
+        maxInfected = 0;
 
-        List<int[]> orders = new ArrayList<>();
-        generateOrders(orders, new int[k], 0, NO_PIPE);
+        boolean[] infected = new boolean[n + 1];
+        infected[infection] = true;
+        explore(infected, 0, NO_PIPE);
 
-        int answer = 0;
-        for (int[] order : orders) {
-            answer = Math.max(answer, countInfectedAfter(order, infection));
-        }
-        return answer;
+        return maxInfected;
     }
 
     private List<List<Pipe>> buildPipes(int n, int[][] edges) {
@@ -44,28 +45,22 @@ class Solution {
         return pipes;
     }
 
-    private void generateOrders(List<int[]> orders, int[] order, int depth, int previousType) {
-        if (depth == order.length) {
-            orders.add(order.clone());
+    // openedCount번 연 뒤의 감염 상태에서, 다음에 열 종류를 하나씩 골라 이어간다.
+    private void explore(boolean[] infected, int openedCount, int previousType) {
+        int infectedCount = countInfected(infected);
+        maxInfected = Math.max(maxInfected, infectedCount);
+
+        if (openedCount == maxOpenCount || infectedCount == nodeCount) {
             return;
         }
         for (int type = 1; type <= PIPE_TYPE_COUNT; type++) {
             if (type == previousType) {
                 continue;
             }
-            order[depth] = type;
-            generateOrders(orders, order, depth + 1, type);
+            boolean[] next = infected.clone();
+            spread(next, type);
+            explore(next, openedCount + 1, type);
         }
-    }
-
-    private int countInfectedAfter(int[] order, int infection) {
-        boolean[] infected = new boolean[nodeCount + 1];
-        infected[infection] = true;
-
-        for (int type : order) {
-            spread(infected, type);
-        }
-        return countInfected(infected);
     }
 
     private void spread(boolean[] infected, int pipeType) {
