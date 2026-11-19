@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# 새 문제 폴더를 problems/_template에서 만든다.
+# 사용: bin/new programmers/virus-pipe
+set -euo pipefail
+
+root="$(cd "$(dirname "$0")/.." && pwd)"
+name="${1:?사용법: bin/new <사이트>/<slug>  (예: programmers/virus-pipe)}"
+target="$root/problems/$name"
+
+[[ -e "$target" ]] && { echo "이미 있어요: problems/$name" >&2; exit 1; }
+
+mkdir -p "$(dirname "$target")"
+cp -R "$root/problems/_template" "$target"
+echo "만들었어요: problems/$name"
