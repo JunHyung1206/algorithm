@@ -19,4 +19,4 @@
 
 1. 각 행이 가져야 할 정보(상태 정의)를 정한다.
 2. C와 Z의 의사코드를 쓰고, 예제 1을 손으로 따라간다.
-3. Java로 옮기고 `bin/run programmers/table-edit`으로 확인한다. `Check.java`에 예제와 기준 구현 비교가 준비돼 있다.
+3. Java로 옮기고 `bin/run implementation/table-edit`으로 확인한다. `Check.java`에 예제와 기준 구현 비교가 준비돼 있다.

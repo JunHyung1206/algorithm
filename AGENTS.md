@@ -31,7 +31,7 @@
 
 ## 구조와 실행
 
-README.md 참고. 문제 하나는 `problems/<사이트>/<slug>/` 폴더 하나다.
+README.md 참고. 문제 하나는 `problems/<유형>/<slug>/` 폴더 하나다. 유형 폴더와 태그 규칙도 README에 있다.
 
 ## Git 작업 방식
 

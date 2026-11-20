@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # 문제 폴더의 Solution.java, Check.java를 harness/와 함께 컴파일해서 Check를 실행한다.
-# 사용: bin/run programmers/virus-pipe
+# 사용: bin/run brute-force/virus-pipe
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
-name="${1:?사용법: bin/run <사이트>/<slug>  (예: programmers/virus-pipe)}"
+name="${1:?사용법: bin/run <유형>/<slug>  (예: brute-force/virus-pipe)}"
 dir="$root/problems/$name"
 
 [[ -d "$dir" ]] || { echo "없는 문제: problems/$name" >&2; exit 1; }
