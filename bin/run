@@ -8,6 +8,7 @@ name="${1:?사용법: bin/run <유형>/<slug>  (예: brute-force/virus-pipe)}"
 dir="$root/problems/$name"
 
 [[ -d "$dir" ]] || { echo "없는 문제: problems/$name" >&2; exit 1; }
+[[ -f "$dir/Check.java" ]] || { echo "Check.java가 없어요. 필요하면: cp problems/_template/Check.java problems/$name/" >&2; exit 1; }
 
 out="$root/build/$name"
 rm -rf "$out"

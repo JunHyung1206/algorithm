@@ -5,14 +5,14 @@
 ## 구조
 
 ```text
-bin/new        새 문제 폴더를 템플릿에서 만든다
+bin/new        새 문제 폴더를 템플릿에서 만든다 (Solution.java, README.md)
 bin/run        문제의 Check.java를 컴파일해서 실행한다
 harness/       모든 문제가 공유하는 검증 도구 (Expect.java)
 problems/
   _template/   새 문제의 시작점
   <유형>/<slug>/      주 유형 폴더 아래에 문제 하나 (유형 폴더 이름은 아래 표)
     Solution.java   제출하는 코드 (프로그래머스 형식)
-    Check.java      예제, 반례, 기준 구현과의 비교
+    Check.java      (필요할 때만) 반례, 기준 구현과의 비교
     README.md       출처, 유형 태그, 핵심 제약, 막힌 점과 배운 점
 build/         컴파일 결과 (git에 올리지 않는다)
 ```
@@ -26,7 +26,15 @@ bin/run brute-force/virus-pipe     # 컴파일하고 Check 실행 (실패가 있
 
 JDK(`javac`, `java`)만 있으면 돼요. 외부 라이브러리는 쓰지 않아요.
 
-## Check.java에 넣을 것
+## Check.java는 필요할 때만
+
+채점은 기본으로 사이트에서 해요. 사이트에서 틀렸는데 어떤 입력에서 틀렸는지 모를 때, 또는 통과했어도 확신이 없을 때만 `Check.java`를 만들어요.
+
+```bash
+cp problems/_template/Check.java problems/dp/some-problem/
+```
+
+넣을 것:
 
 1. 문제의 입출력 예
 2. 직접 만든 작은 반례

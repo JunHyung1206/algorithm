@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 새 문제 폴더를 problems/_template에서 만든다.
+# 새 문제 폴더를 problems/_template에서 만든다. Check.java는 필요할 때만 따로 복사한다.
 # 사용: bin/new brute-force/virus-pipe
 set -euo pipefail
 
@@ -10,5 +10,6 @@ target="$root/problems/$name"
 [[ -e "$target" ]] && { echo "이미 있어요: problems/$name" >&2; exit 1; }
 
 mkdir -p "$(dirname "$target")"
-cp -R "$root/problems/_template" "$target"
+mkdir -p "$target"
+cp "$root/problems/_template/Solution.java" "$root/problems/_template/README.md" "$target/"
 echo "만들었어요: problems/$name"
